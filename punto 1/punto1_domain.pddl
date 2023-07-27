@@ -12,7 +12,6 @@
 )
 
  (:constants
-  
   )
 
  (:predicates
@@ -32,30 +31,30 @@
  )
 
  (:action load
-     :parameters (?c - carrier ?b - box ?a - agent ?l - location)
+     :parameters (?a - agent ?c - carrier ?b - box ?l - location)
      :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (not (full ?c)))
      :effect (and(on ?b ?c) (not(in ?b ?l)) (full ?c)) ;; in merito a (full ?c) per adesso assumiamo capacità unitaria
 )
 
 
 (:action unload
-     :parameters (?c - carrier ?b - box ?a - agent ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (full ?c))
+     :parameters (?a - agent ?c - carrier ?b - box ?l - location)
+     :precondition (and (in ?a ?l) (in ?c ?l) (full ?c) (on ?b ?c))
      :effect (and (not (on ?b ?c)) (in ?b ?l) (not(full ?c)))
 )
 
 
 (:action vent
-     :parameters (?a - agent ?b - box ?l - location ?c - content ?p - person)
+     :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
      :precondition (and (inbox ?b ?c) (in ?a ?l) (in ?b ?l) (need ?p ?c) (in ?p ?l))
      :effect (and (not (inbox ?b ?c)) (empty ?b) (in ?c ?l) (not (need ?p ?c)) (has ?p ?c))
 )
 
 
- (:action fill
-     :parameters (?a - agent ?b - box ?l - location ?c - content)
+(:action fill
+     :parameters (?a - agent ?b - box ?c - content ?l - location)
      :precondition (and (empty ?b) (in ?a ?l) (in ?b ?l) (in ?c ?l))
      :effect (and (not (empty ?b)) (inbox ?b ?c))
- )
+)
 
 )
