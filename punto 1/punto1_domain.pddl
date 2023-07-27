@@ -40,7 +40,7 @@
 
 (:action unload
      :parameters (?c - carrier ?b - box ?a - agent ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (full ?c))
+     :precondition (and (in ?a ?l) (in ?c ?l) (full ?c))
      :effect (and (not (on ?b ?c)) (in ?b ?l) (not(full ?c)))
 )
 
