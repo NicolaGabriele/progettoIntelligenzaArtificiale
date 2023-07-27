@@ -54,7 +54,7 @@
 
  (:action fill
      :parameters (?a - agent ?b - box ?l - location ?c - content)
-     :precondition (and (empty ?b) (in ?a ?l) (in ?b ?l))
+     :precondition (and (empty ?b) (in ?a ?l) (in ?b ?l) (in ?c ?l))
      :effect (and (not (empty ?b)) (inbox ?b ?c))
  )
 
