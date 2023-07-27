@@ -47,7 +47,7 @@
 (:action vent
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
      :precondition (and (inbox ?b ?c) (in ?a ?l) (in ?b ?l) (need ?p ?c) (in ?p ?l))
-     :effect (and (not (inbox ?b ?c)) (empty ?b) (in ?c ?l) (not (need ?p ?c)) (has ?p ?c))
+     :effect (and (not (inbox ?b ?c)) (empty ?b) (not (need ?p ?c)) (has ?p ?c))
 )
 
 
