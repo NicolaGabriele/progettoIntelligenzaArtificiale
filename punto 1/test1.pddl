@@ -26,8 +26,9 @@
    (in p2 l3)
    (in p3 l3)
    
-   (empty b1)
-   (empty b2)
+   (emptyBox b1)
+   (emptyBox b2)
+   (emptyCarrier c1)
    
    (need p1 m1)
    (need  p1 f)

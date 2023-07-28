@@ -1,5 +1,5 @@
 (define (domain punto1)
- (:requirements :strips :typing  :negative-preconditions)
+ (:requirements :strips :typing)
  (:types
   food - content
   medicine - content
@@ -19,9 +19,10 @@
    (need  ?p - person ?c - content)
    (has ?p - person ?c - content)
    (inbox ?b - box ?c - content)
-   (empty ?b - box)  
+   (emptyBox ?b - box)  
    (on ?b - box ?c - carrier) 
-   (full ?c - carrier)
+   (fullCarrier ?c - carrier)
+   (emptyCarrier ?c - carrier)
    )
 
  (:action move
@@ -32,29 +33,29 @@
 
  (:action load
      :parameters (?a - agent ?c - carrier ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (not (full ?c)))
-     :effect (and(on ?b ?c) (not(in ?b ?l)) (full ?c)) ;; in merito a (full ?c) per adesso assumiamo capacità unitaria
+     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (emptyCarrier ?c))
+     :effect (and(on ?b ?c) (not(in ?b ?l)) (fullCarrier ?c) (not (emptyCarrier ?c))) ;; in merito a (empty e full ?c) per adesso assumiamo capacità unitaria
 )
 
 
 (:action unload
      :parameters (?a - agent ?c - carrier ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (full ?c) (on ?b ?c))
-     :effect (and (not (on ?b ?c)) (in ?b ?l) (not(full ?c)))
+     :precondition (and (in ?a ?l) (in ?c ?l) (fullCarrier ?c) (on ?b ?c))
+     :effect (and (not (on ?b ?c)) (in ?b ?l) (not(fullCarrier ?c)) (emptyCarrier ?c))
 )
 
 
 (:action vent
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
      :precondition (and (inbox ?b ?c) (in ?a ?l) (in ?b ?l) (need ?p ?c) (in ?p ?l))
-     :effect (and (not (inbox ?b ?c)) (empty ?b) (not (need ?p ?c)) (has ?p ?c))
+     :effect (and (not (inbox ?b ?c)) (emptyBox ?b) (not (need ?p ?c)) (has ?p ?c))
 )
 
 
 (:action fill
      :parameters (?a - agent ?b - box ?c - content ?l - location)
-     :precondition (and (empty ?b) (in ?a ?l) (in ?b ?l) (in ?c ?l))
-     :effect (and (not (empty ?b)) (inbox ?b ?c))
+     :precondition (and (emptyBox ?b) (in ?a ?l) (in ?b ?l) (in ?c ?l))
+     :effect (and (not (emptyBox ?b)) (inbox ?b ?c))
 )
 
 )
