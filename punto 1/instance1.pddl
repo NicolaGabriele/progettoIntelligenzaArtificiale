@@ -1,4 +1,4 @@
-(define (problem test1)
+(define (problem instance1)
   (:domain punto1)
 
   (:objects
