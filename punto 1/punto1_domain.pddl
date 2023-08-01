@@ -1,15 +1,16 @@
 (define (domain punto1)
  (:requirements :strips :typing)
  (:types
-  food - content
-  medicine - content
-  tools - content
+  ;food - content
+  ;medicine - content
+  ;tools - content
+  content
   location
   person
   agent
   box
   carrier
-  place ;capacità
+  place ;posto sul carrier per la box
 )
 
  (:constants
