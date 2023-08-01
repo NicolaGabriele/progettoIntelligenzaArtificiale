@@ -17,15 +17,16 @@
  )
 
  (:predicates
-   (in ?b - object ?l - location)
+   (in ?o - object ?l - location)
    (need  ?p - person ?c - content)
    (has ?p - person ?c - content)
-   (inbox ?b - box ?c - content)
-   (emptyBox ?b - box)  
-   (on ?b - box ?c - carrier) 
+   (inBox ?b - box ?c - content)
+   ;(emptyBox ?b - box)  
+   (fullBox ?b - box)
+   (boxOnPlace ?b - box ?p - place) 
    ;(fullCarrier ?c - carrier)
    ;(emptyCarrier ?c - carrier)
-   (placeOccupied ?p - place)
+   (fullPlace ?p - place)
    (placeOnCarrier ?p - place ?c - carrier)
   )
 
@@ -37,29 +38,29 @@
 
  (:action load
      :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (placeOnCarrier ?p ?c) (not (placeOccupied ?p)) )
-     :effect (and(on ?b ?c) (not(in ?b ?l)) (placeOccupied ?p) ) ;; in merito a (empty e full ?c) per adesso assumiamo capacità unitaria
+     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (placeOnCarrier ?p ?c) (not (fullPlace ?p)) )
+     :effect (and(boxOnPlace ?b ?p) (not(in ?b ?l)) (fullPlace ?p) ) 
 )
 
 
 (:action unload
      :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (on ?b ?c) (placeOnCarrier ?p ?c) (placeOccupied ?p) )
-     :effect (and (not (on ?b ?c)) (in ?b ?l) (not (placeOccupied ?p)) )
+     :precondition (and (in ?a ?l) (in ?c ?l) (boxOnPlace ?b ?p) (placeOnCarrier ?p ?c) (fullPlace ?p) )
+     :effect (and (not (boxOnPlace ?b ?p)) (in ?b ?l) (not (fullPlace ?p)) )
 )
 
 
 (:action vent
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
-     :precondition (and (inbox ?b ?c) (in ?a ?l) (in ?b ?l) (need ?p ?c) (in ?p ?l))
-     :effect (and (not (inbox ?b ?c)) (emptyBox ?b) (not (need ?p ?c)) (has ?p ?c))
+     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c))
+     :effect (and (not (inBox ?b ?c)) (not (fullBox ?b)) (not (need ?p ?c)) (has ?p ?c))
 )
 
 
 (:action fill
      :parameters (?a - agent ?b - box ?c - content ?l - location)
-     :precondition (and (emptyBox ?b) (in ?a ?l) (in ?b ?l) (in ?c ?l))
-     :effect (and (not (emptyBox ?b)) (inbox ?b ?c))
+     :precondition (and (not (fullBox ?b)) (in ?a ?l) (in ?b ?l) (in ?c ?l))
+     :effect (and (fullBox ?b) (inBox ?b ?c))
 )
 
 )

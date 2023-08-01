@@ -28,12 +28,6 @@
    (in medicine depot)
    (in tools depot)
    
-   (emptyBox b1)
-   (emptyBox b2)
-   (emptyBox b3)
-   (emptyBox b4)
-   (emptyBox b5)
-   
    (in p1 l1)
    (in p2 l1)
    (in p3 l2)
@@ -44,8 +38,6 @@
    (need  p3 food)
 )
 
-;; the task is to move all containers to locations l2
-;; ca and cc in pile p2, the rest in q2
   (:goal
     (and (has p1 food) (has p1 medicine) (has p2 medicine) (has p3 food))
   )
