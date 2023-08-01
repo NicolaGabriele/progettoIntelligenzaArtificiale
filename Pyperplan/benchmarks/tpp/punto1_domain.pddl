@@ -1,5 +1,5 @@
 (define (domain punto1)
- (:requirements :strips :typing :negative-preconditions)
+ (:requirements :strips :typing)
  
  (:types
   ;food - content
@@ -53,7 +53,7 @@
 
 (:action vent
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
-     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c) (not (noPreference ?p)) )
+     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c) (not (noPreference ?p))  )
      :effect (and (not (inBox ?b ?c)) (not (fullBox ?b)) (not (need ?p ?c)) (has ?p ?c))
 )
 

@@ -1,0 +1,1 @@
+Ho provato a gestire i not nelle preconditions, manca da gestire il not per la madonna greca di noPreference, però anche così non trova soluzione
