@@ -22,14 +22,10 @@
    (need  ?p - person ?c - content)
    (has ?p - person ?c - content)
    (inBox ?b - box ?c - content)
-   ;(emptyBox ?b - box)  
    (fullBox ?b - box)
    (boxOnPlace ?b - box ?p - place) 
-   ;(fullCarrier ?c - carrier)
-   ;(emptyCarrier ?c - carrier)
    (fullPlace ?p - place)
    (placeOnCarrier ?p - place ?c - carrier)
-   
    (noPreference ?p - person) ;gestione or
    (hasSomething ?p - person) ;gestione or
    
@@ -61,7 +57,7 @@
      :effect (and (not (inBox ?b ?c)) (not (fullBox ?b)) (not (need ?p ?c)) (has ?p ?c))
 )
 
-(:action vent ;gestione or
+(:action ventOr ;gestione or
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
      :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (not (hasSomething ?p)) (need ?p ?c) (noPreference ?p))
      :effect (and (not (inBox ?b ?c)) (not (fullBox ?b)) (not (need ?p ?c)) (hasSomething ?p) )
