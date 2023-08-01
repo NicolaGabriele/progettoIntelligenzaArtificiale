@@ -9,10 +9,11 @@
   agent
   box
   carrier
+  place ;capacità
 )
 
  (:constants
-  )
+ )
 
  (:predicates
    (in ?b - object ?l - location)
@@ -21,9 +22,11 @@
    (inbox ?b - box ?c - content)
    (emptyBox ?b - box)  
    (on ?b - box ?c - carrier) 
-   (fullCarrier ?c - carrier)
-   (emptyCarrier ?c - carrier)
-   )
+   ;(fullCarrier ?c - carrier)
+   ;(emptyCarrier ?c - carrier)
+   (placeOccupied ?p - place)
+   (placeOnCarrier ?p - place ?c - carrier)
+  )
 
  (:action move
      :parameters (?a - agent ?c - carrier ?from ?to - location)
@@ -32,16 +35,16 @@
  )
 
  (:action load
-     :parameters (?a - agent ?c - carrier ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (emptyCarrier ?c))
-     :effect (and(on ?b ?c) (not(in ?b ?l)) (fullCarrier ?c) (not (emptyCarrier ?c))) ;; in merito a (empty e full ?c) per adesso assumiamo capacità unitaria
+     :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
+     :precondition (and (in ?a ?l) (in ?c ?l) (in ?b ?l) (placeOnCarrier ?p ?c) (not (placeOccupied ?p)) )
+     :effect (and(on ?b ?c) (not(in ?b ?l)) (placeOccupied ?p) ) ;; in merito a (empty e full ?c) per adesso assumiamo capacità unitaria
 )
 
 
 (:action unload
-     :parameters (?a - agent ?c - carrier ?b - box ?l - location)
-     :precondition (and (in ?a ?l) (in ?c ?l) (fullCarrier ?c) (on ?b ?c))
-     :effect (and (not (on ?b ?c)) (in ?b ?l) (not(fullCarrier ?c)) (emptyCarrier ?c))
+     :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
+     :precondition (and (in ?a ?l) (in ?c ?l) (on ?b ?c) (placeOnCarrier ?p ?c) (placeOccupied ?p) )
+     :effect (and (not (on ?b ?c)) (in ?b ?l) (not (placeOccupied ?p)) )
 )
 
 
