@@ -12,6 +12,16 @@
   )
 
   (:init
+   (emptyBox b1)
+   (emptyBox b2)
+   (emptyBox b3)
+   (emptyBox b4)
+   (emptyBox b5)
+   (emptyPlace place1)
+   (emptyPlace place2)
+   (emptyPlace place3)
+   (emptyPlace place4)
+   
    (in a1 depot)
    (in c1 depot)
    (in b1 depot)
@@ -36,6 +46,10 @@
    (need p1 medicine)
    (need  p2 medicine)
    (need  p3 food)
+   
+   (needAll p1)
+   (needAll p2)
+   (needAll p3)
 )
 
   (:goal
