@@ -21,14 +21,16 @@
    (in ?o - object ?l - location)
    (need  ?p - person ?c - content)
    (has ?p - person ?c - content)
+   (hasSomething ?p - person) ;gestione or
    (inBox ?b - box ?c - content)
    (emptyBox ?b - box)
    (boxOnPlace ?b - box ?p - place) 
    (emptyPlace ?p - place) ;per gestire la load
    (fullPlace ?p - place) ;per gestire l'unload
    (placeOnCarrier ?p - place ?c - carrier)
-   (noPreference ?p - person) ;gestione or
-   (hasSomething ?p - person) ;gestione or
+   
+   (needAll ?p - person) ;gestione or
+   (needSomething ?p - person)
    
   )
 
@@ -54,14 +56,14 @@
 
 (:action vent
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
-     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c) (not (noPreference ?p))  )
+     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c) (needAll ?p) )
      :effect (and (not (inBox ?b ?c)) (emptyBox ?b) (not (need ?p ?c)) (has ?p ?c))
 )
 
 (:action ventOr ;gestione or
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
-     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (not (hasSomething ?p)) (need ?p ?c) (noPreference ?p))
-     :effect (and (not (inBox ?b ?c)) (emptyBox ?b) (not (need ?p ?c)) (hasSomething ?p) )
+     :precondition (and (inBox ?b ?c) (in ?a ?l) (in ?b ?l) (in ?p ?l) (need ?p ?c) (needSomething ?p))
+     :effect (and (not (inBox ?b ?c)) (emptyBox ?b) (not (need ?p ?c)) (not (needSomething ?p)) (hasSomething ?p) )
 )
 
 (:action fill

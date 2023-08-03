@@ -12,6 +12,18 @@
   )
 
   (:init
+   (= (weigth_box b1) 0)
+   (= (weigth_box b2) 0)
+   (= (weigth_box b3) 0)
+   (= (weigth_box b4) 0)
+   (= (weigth_box b5) 0)
+   (= (weigth_carrier c1) 50)
+   (= (weigth_content medicine) 1)
+   (= (weigth_content food) 2)
+   (= (weigth_content tools) 3)
+   (= (move_duration) 10)
+   (= (load_duration) 5)
+   (= (fill_duration) 2)
    (emptyBox b1)
    (emptyBox b2)
    (emptyBox b3)
