@@ -38,7 +38,7 @@
    (emptyPlace ?p - place) ;per gestire la load
    (fullPlace ?p - place) ;per gestire l'unload
    (placeOnCarrier ?p - place ?c - carrier)
-   
+   (freeAgent ?g - agent) ;Ci dice se l'agent g è libero oppure no
    (needAll ?p - person) ;gestione or
    (needSomething ?p - person)
    
@@ -47,31 +47,40 @@
  (:durative-action move
      :parameters (?a - agent ?c - carrier ?from ?to - location)
      :duration (= ?duration (* (weigth_carrier ?c) (move_duration))) 
-     :condition (and (at start (in ?a ?from)) (at start (in ?c ?from)))
+     :condition (and 
+     		    (at start (in ?a ?from))
+     		    (at start (in ?c ?from))
+     		    (at start (freeAgent ?a))
+     		)
      :effect (and
+     	       (at start (not(freeAgent ?a))) 
                (at start (not (in ?a ?from))) 
                (at start (not (in ?c ?from))) 
                (at end (in ?a ?to)) 
                (at end (in ?c ?to)) 
-          )
+               (at end (freeAgent ?a))
+             )
  );end move
 
  (:durative-action load
      :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
      :duration (= ?duration (* (weigth_box ?b) (load_duration)))
      :condition (and 
+        	    (at start (freeAgent ?a))
                     (over all (in ?a ?l)) 
                     (over all (in ?c ?l))
                     (over all (in ?b ?l)) 
                     (over all(placeOnCarrier ?p ?c)) 
                     (at start(emptyPlace ?p)) 
-               )
+                )
      :effect (and
-                    (at end(boxOnPlace ?b ?p)) 
+     		    (at start (not(freeAgent ?a)))                
                     (at start(not(in ?b ?l))) 
-                    (at start(not(emptyPlace ?p))) 
-                    (at start(fullPlace ?p))
+                    (at end(boxOnPlace ?b ?p))
+                    (at end(not(emptyPlace ?p))) 
+                    (at end(fullPlace ?p))
                     (at end (increase (weigth_carrier ?c) (weigth_box ?b)))
+                    (at end(freeAgent ?a))
                ) 
 );load
 
@@ -80,6 +89,7 @@
      :parameters (?a - agent ?c - carrier ?p - place ?b - box ?l - location)
      :duration (= ?duration (* (weigth_box ?b) (load_duration)))
      :condition (and 
+        	    (at start (freeAgent ?a))
                     (over all(in ?a ?l)) 
                     (over all(in ?c ?l)) 
                     (at start(boxOnPlace ?b ?p)) 
@@ -87,11 +97,13 @@
                     (at start(fullPlace ?p)) 
                )
      :effect (and 
-                    (at end(not (boxOnPlace ?b ?p))) 
+        	    (at start (not(freeAgent ?a)))
                     (at start(in ?b ?l)) 
-                    (at start(not (fullPlace ?p))) 
-                    (at start(emptyPlace ?p))
+                    (at end(not (boxOnPlace ?b ?p))) 
+                    (at end(not (fullPlace ?p))) 
+                    (at end(emptyPlace ?p))
                     (at end (decrease (weigth_carrier ?c) (weigth_box ?b)))
+                    (at end (freeAgent ?a))
                )
 );unload
 
@@ -100,6 +112,7 @@
      :parameters (?a - agent ?b - box ?c - content ?p - person ?l - location)
      :duration (= ?duration (* (weigth_content ?c) (fill_duration)))
      :condition (and 
+     		    (at start (freeAgent ?a))
                     (at start (inBox ?b ?c)) 
                     (over all (in ?a ?l)) 
                     (over all (in ?b ?l)) 
@@ -108,11 +121,14 @@
                     (over all (needAll ?p)) 
                )
      :effect (and 
+     		    (at start (not(freeAgent ?a)))
                     (at end (not (inBox ?b ?c))) 
-                    (at start (emptyBox ?b)) 
-                    (at start (not (need ?p ?c))) 
-                    (at end(has ?p ?c))
+                    (at end (emptyBox ?b)) 
+                    (at end (not (need ?p ?c))) 
+                    (at end (has ?p ?c))
                     (at end (decrease (weigth_box ?b) (weigth_content ?c)))
+                    ;(at end (assign ()))
+                    (at end (freeAgent ?a))
                )
 );vent
 
@@ -126,15 +142,18 @@
      :parameters (?a - agent ?b - box ?c - content ?l - location)
      :duration (= ?duration (* (weigth_content ?c) (fill_duration)))
      :condition (and 
+     		    (at start (freeAgent ?a))
                     (at start(emptyBox ?b)) 
                     (over all(in ?a ?l)) 
                     (over all(in ?b ?l)) 
                     (over all(in ?c ?l))
                )
      :effect (and 
-               (at start (not(emptyBox ?b))) 
+     	       (at start (not(freeAgent ?a))) 
+               (at end (not(emptyBox ?b))) 
                (at end (inBox ?b ?c))
                (at end (increase (weigth_box ?b) (weigth_content ?c)))
+               (at end (freeAgent ?a))
           )
 );fill
 
