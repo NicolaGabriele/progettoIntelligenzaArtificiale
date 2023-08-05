@@ -5,30 +5,27 @@
   ;food - content
   ;medicine - content
   ;tools - content
-  content
-  location
-  person
-  agent
-  box
-  carrier
-  place ;posto sul carrier per la box
+  content - localizable
+  location - localizable
+  person - localizable
+  agent - localizable
+  box - localizable
+  carrier - localizable
+  place - localizable ;posto sul carrier per la box
 )
 
 (:functions
-     (weigth_box ?box)
-     (weigth_carrier ?carrier)
-     (weigth_content ?content)
+     (weigth_box ?b - box)
+     (weigth_carrier ?c - carrier)
+     (weigth_content ?c - content)
      (move_duration)
      (fill_duration)
      (load_duration)
 )
 
- (:constants
-     
- )
 
  (:predicates
-   (in ?o - object ?l - location)
+   (in ?o - localizable ?l - location)
    (need  ?p - person ?c - content)
    (has ?p - person ?c - content)
    (hasSomething ?p - person) ;gestione or
@@ -45,7 +42,7 @@
   )
 
  (:durative-action move
-     :parameters (?a - agent ?c - carrier ?from ?to - location)
+     :parameters (?a - agent ?c - carrier ?from - location ?to - location)
      :duration (= ?duration (* (weigth_carrier ?c) (move_duration))) 
      :condition (and 
      		    (at start (in ?a ?from))
