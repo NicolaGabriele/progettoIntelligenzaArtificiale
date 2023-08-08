@@ -1,0 +1,7 @@
+Def(euristica ammissibile (dal libro)): euristica che non sovrastima mai il
+costo per raggiungere il goal (è una funzione "ottimistica").
+
+Def(euristica consistente(Libro)): h(n) è consistente se per ogni nodo n e
+per ogni nodo n', successore di n, generato tramite una azione a vale che:
+
+			h(n) <= c(n,a,n')+h(n')

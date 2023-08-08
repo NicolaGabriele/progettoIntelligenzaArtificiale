@@ -2,16 +2,13 @@
  (:requirements :strips :typing)
  
  (:types
-  ;food - content
-  ;medicine - content
-  ;tools - content
   content
   location
   person
   agent
   box
   carrier
-  place ;posto sul carrier per la box
+  place 
 )
 
  (:constants
@@ -28,10 +25,8 @@
    (emptyPlace ?p - place) ;per gestire la load
    (fullPlace ?p - place) ;per gestire l'unload
    (placeOnCarrier ?p - place ?c - carrier)
-   
    (needAll ?p - person) ;gestione or
-   (needSomething ?p - person)
-   
+   (needSomething ?p - person) 
   )
 
  (:action move
