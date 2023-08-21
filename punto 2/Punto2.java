@@ -20,18 +20,20 @@ public class Punto2 {
 
     public static void main(String...args) throws InvalidConfigurationException, FileNotFoundException {
 
+        long start = System.currentTimeMillis();
         MyPlanner planner = new MyPlanner();
         planner.setDomain(Settings.domain);
-        planner.setProblem(Settings.instance1);
+        planner.setProblem(Settings.instance3);
         Plan p = planner.solve();
         System.out.println(p);
+        System.out.println((System.currentTimeMillis()-start)/1000);
     }
 }
 
 
 class MyPlanner extends AbstractPlanner {
 
-    private final int heuristic_weigth = 100;
+    private final int heuristic_weigth = 1;
 
     @Override
     public Problem instantiate(DefaultParsedProblem defaultParsedProblem) {
@@ -42,7 +44,7 @@ class MyPlanner extends AbstractPlanner {
 
     @Override
     public Plan solve(Problem problem) throws ProblemNotSupportedException {
-        StateSpaceSearch search = StateSpaceSearch.getInstance(SearchStrategy.Name.ASTAR, StateHeuristic.Name.AJUSTED_SUM2,heuristic_weigth);
+        StateSpaceSearch search = StateSpaceSearch.getInstance(SearchStrategy.Name.ASTAR, StateHeuristic.Name.EMERGENCY_PROBLEM,heuristic_weigth);
         Node solution = search.searchSolutionNode(problem);
         return search.extractPlan(solution,problem);
     }
