@@ -4,7 +4,7 @@
   (:objects
    a1 a2 - agent
    c1 c2 - carrier
-   place1 place2 place3 place4 place5 - place
+   place1 place2 place3 place4 - place
    depot l1 l2 l3 l4 l5 l6 l7 - location
    p1 p2 p3 p4 p5 p6 p7 p8 - person
    b1 b2 b3 b4 - box
@@ -20,7 +20,7 @@
    (emptyPlace place2)
    (emptyPlace place3)
    (emptyPlace place4)
-   (emptyPlace place5)
+  
    
    (in a1 depot)
    (in a2 depot)
@@ -32,7 +32,6 @@
    (in b4 depot)
    (placeOnCarrier place1 c1)
    (placeOnCarrier place2 c1)
-   (placeOnCarrier place5 c1)
    (placeOnCarrier place3 c2)
    (placeOnCarrier place4 c2)
    
