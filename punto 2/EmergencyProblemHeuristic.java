@@ -128,7 +128,8 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
         }
         LinkedList<String> contents = new LinkedList<>();
         for(int i: soddisfatti)
-            contents.add(this.fluents.get(i).get(2));
+            if(fluents.get(i).size()>2)
+                contents.add(this.fluents.get(i).get(2));
         List<Integer> predicates = this.predicates.get("inbox").stream()
             .filter(e->{
               BitVector bv = new BitVector();
@@ -137,7 +138,8 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
             }).collect(Collectors.toList());
         List<String> contentsInBox = new LinkedList<>();
         for(Integer i: predicates)
-            contentsInBox.add(this.fluents.get(i).get(2));
+            if(fluents.get(i).size()>2)
+                contentsInBox.add(this.fluents.get(i).get(2));
         while(!contents.isEmpty()){
             String content = contents.removeFirst();
             Iterator<String> it = contentsInBox.iterator();
