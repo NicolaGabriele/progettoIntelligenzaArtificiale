@@ -16,64 +16,14 @@ import java.util.stream.Collectors;
 public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
 
     private Problem p;
-    private double alpha = 1, rate = 0.1;
-    private final int maxNumPlace = 4;
     private HashMap<String,List<Integer>> predicates;
-    private HashMap<String, Integer> constants;
-    private HashMap<String,Integer> predicateCodes;
     private HashMap<Integer, List<String>> fluents;
     protected EmergencyProblemHeuristic(Problem problem) {
         super(problem);
         this.p = problem;
         this.predicates = extractPredicates();
-        this.constants = extractConstants();
-        this.predicateCodes = extractPredicateCodes();
         this.fluents = extractFluents();
-        problem.getConstantSymbols().stream().filter(e -> e.contains("place")).count();
-    }
-
-    private HashMap<String,Integer> extractPredicateCodes(){
-        HashMap<String,Integer> ret = new HashMap<>();
-        int index = 0;
-        for(String s: p.getPredicateSymbols())
-            ret.put(s,0);
-        return ret;
-    }
-    private HashMap<String, List<Integer>> extractPredicates(){
-        HashMap<String,List<Integer>> ret = new HashMap<>();
-        int index = 0;
-        for(Fluent f: p.getFluents()) {
-            String key = new StringTokenizer(p.toString(f),"( )",false).nextToken();
-            if(ret.get(key) == null)
-                ret.put(key, new LinkedList<>());
-            ret.get(key).add(index);
-            index++;
-        }
-        return ret;
-    }
-
-    private HashMap<Integer, List<String>> extractFluents(){
-        HashMap<Integer,List<String>> ret = new HashMap<>();
-        int index = 0;
-        for(Fluent f: p.getFluents()) {
-            StringTokenizer st = new StringTokenizer(p.toString(f),"( )",false);
-            if(ret.get(index)==null)
-                ret.put(index,new ArrayList<>());
-            while(st.hasMoreTokens())
-                ret.get(index).add(st.nextToken());
-            index++;
-        }
-        return ret;
-    }
-
-    private HashMap<String,Integer> extractConstants(){
-        HashMap<String,Integer> ret = new HashMap<>();
-        int index  = 0;
-        for(String s: p.getConstantSymbols()) {
-            ret.put(s,index);
-            index++;
-        }
-        return ret;
+        int numCarrier = (int)problem.getConstantSymbols().stream().filter(e->e.contains("c") && e.length() == 2).count();
     }
 
 
@@ -99,6 +49,7 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
         int value = goal.cardinality() - count;
 
         return value+boxCostraints(state,goal)+countSatisfied(state, "emptybox");
+
     }
 
     @Override
@@ -137,9 +88,11 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
               return state.satisfy(new Condition(bv, new BitVector()));
             }).collect(Collectors.toList());
         List<String> contentsInBox = new LinkedList<>();
+        int hasSom = 0;
         for(Integer i: predicates)
             if(fluents.get(i).size()>2)
                 contentsInBox.add(this.fluents.get(i).get(2));
+            else hasSom++;
         while(!contents.isEmpty()){
             String content = contents.removeFirst();
             Iterator<String> it = contentsInBox.iterator();
@@ -151,7 +104,34 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
                 }
             }
         }
-        return contentsInBox.size();
+        return contentsInBox.size()-hasSom;
+    }
+
+    private HashMap<String, List<Integer>> extractPredicates(){
+        HashMap<String,List<Integer>> ret = new HashMap<>();
+        int index = 0;
+        for(Fluent f: p.getFluents()) {
+            String key = new StringTokenizer(p.toString(f),"( )",false).nextToken();
+            if(ret.get(key) == null)
+                ret.put(key, new ArrayList<>());
+            ret.get(key).add(index);
+            index++;
+        }
+        return ret;
+    }
+
+    private HashMap<Integer, List<String>> extractFluents(){
+        HashMap<Integer,List<String>> ret = new HashMap<>();
+        int index = 0;
+        for(Fluent f: p.getFluents()) {
+            StringTokenizer st = new StringTokenizer(p.toString(f),"( )",false);
+            if(ret.get(index)==null)
+                ret.put(index,new ArrayList<>());
+            while(st.hasMoreTokens())
+                ret.get(index).add(st.nextToken());
+            index++;
+        }
+        return ret;
     }
 
 }
