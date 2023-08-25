@@ -23,7 +23,6 @@ public class EmergencyProblemHeuristic extends RelaxedGraphHeuristic {
         this.p = problem;
         this.predicates = extractPredicates();
         this.fluents = extractFluents();
-        int numCarrier = (int)problem.getConstantSymbols().stream().filter(e->e.contains("c") && e.length() == 2).count();
     }
 
 

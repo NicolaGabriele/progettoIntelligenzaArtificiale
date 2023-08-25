@@ -1,44 +1,40 @@
+package fr.uga.pddl4j.planners.statespace;
 
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
-import fr.uga.pddl4j.parser.*;
+import fr.uga.pddl4j.parser.DefaultParsedProblem;
+import fr.uga.pddl4j.parser.Expression;
 import fr.uga.pddl4j.plan.Plan;
 import fr.uga.pddl4j.plan.SequentialPlan;
 import fr.uga.pddl4j.planners.AbstractPlanner;
-import fr.uga.pddl4j.planners.InvalidConfigurationException;
 import fr.uga.pddl4j.planners.ProblemNotSupportedException;
 import fr.uga.pddl4j.planners.SearchStrategy;
-
 import fr.uga.pddl4j.planners.statespace.search.ModifiedAStar;
 import fr.uga.pddl4j.planners.statespace.search.Node;
 import fr.uga.pddl4j.planners.statespace.search.StateSpaceSearch;
 import fr.uga.pddl4j.problem.DefaultProblem;
 import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
+import picocli.CommandLine;
 
-import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
+@CommandLine.Command(name = "EPP",
+    version = "EPP 1.0",
+    description = "Solves a specified planning problem by dividing the problem in more sub problems " +
+        "and then executing a sequence of A* searches ",
+    sortOptions = false,
+    mixinStandardHelpOptions = true,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n")
 
-public class Punto2 {
-
-
-    public static void main(String...args) throws InvalidConfigurationException, FileNotFoundException {
-
-        long start = System.currentTimeMillis();
-        MyPlanner planner = new MyPlanner();
-        planner.setTimeout(1000000);
-        planner.setDomain(Settings.domain);
-        planner.setProblem(Settings.instance1);
-        planner.solve();
-        System.out.println((System.currentTimeMillis()-start)/1000);
-
-    }
-}
-
-
-class MyPlanner extends AbstractPlanner {
-
-    private final double heuristic_weigth = 10;
+public class EmergencyProblemPlanner extends AbstractPlanner {
+    private double heuristic_weigth = 1;
+    private int split = 2;
 
     @Override
     public Problem instantiate(DefaultParsedProblem defaultParsedProblem) {
@@ -47,16 +43,28 @@ class MyPlanner extends AbstractPlanner {
         return p;
     }
 
+    @CommandLine.Option(names = { "-w", "--weight" }, defaultValue = "1.0", paramLabel = "<weight>",
+        description = "Set the weight of the heuristic (preset 1.0).")
+    public void setHeuristic_weigth(double heuristic_weigth) {
+        this.heuristic_weigth = heuristic_weigth;
+    }
+
+    @CommandLine.Option(names = { "-s", "--split" }, defaultValue = "2", paramLabel = "<split>",
+        description = "Set the split value (preset 2).")
+    public void setSplit(final int split) {
+        this.split = split;
+    }
+
     @Override
     public Plan solve(Problem problem) throws ProblemNotSupportedException {
         //array di utilità
-        Problem[] subProblems = split(problem,1);
+        Problem[] subProblems = split(problem,split);
         Node[] subSolutions = new Node[subProblems.length];
         Plan[] subplans = new Plan[subProblems.length];
 
         //parametri algoritmi
         SearchStrategy.Name strategyName = SearchStrategy.Name.ASTAR;
-        StateHeuristic.Name heuristic = StateHeuristic.Name.MAX;
+        StateHeuristic.Name heuristic = StateHeuristic.Name.EMERGENCY_PROBLEM;
         int timeout = 1000000;
 
         //inizialmente usiamo A*
@@ -93,7 +101,7 @@ class MyPlanner extends AbstractPlanner {
 
     private void printPlan(Plan p, Problem problem){
         System.out.println(
-                new StringBuilder().append(problem.toString(p)).toString()
+            new StringBuilder().append(problem.toString(p)).toString()
         );
     }
 
@@ -136,17 +144,18 @@ class MyPlanner extends AbstractPlanner {
         return true;
     }
 
+    public static void main(String[] args) {
+        try {
+            final EmergencyProblemPlanner planner = new EmergencyProblemPlanner();
+            CommandLine cmd = new CommandLine(planner);
+            int exitCode = (int) cmd.execute(args);
+            if (exitCode == 1) {
+                System.out.println(cmd.getUsageMessage());
+            }
+            System.exit(exitCode);
+        } catch (Throwable e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 }
-
-/*
-    peso 10 e split 1 piano da 17 azioni
- */
-
-/*
-    PER TABELLA
-    1) MAX su tutte e 3 le istanze pesi: 5, 10 split:
-    2)
-    3)
-    4)
-    5)
- */
