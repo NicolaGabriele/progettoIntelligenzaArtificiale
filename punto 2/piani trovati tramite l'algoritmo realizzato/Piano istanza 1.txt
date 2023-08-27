@@ -1,0 +1,32 @@
+found plan as follows:
+
+00: (     fill a1 b1 food depot) [0]
+01: (     fill a1 b2 food depot) [0]
+02: ( fill a1 b4 medicine depot) [0]
+03: ( fill a1 b5 medicine depot) [0]
+04: (load a1 c1 place1 b5 depot) [0]
+05: (load a1 c1 place2 b2 depot) [0]
+06: (load a1 c1 place3 b4 depot) [0]
+07: (load a1 c1 place4 b1 depot) [0]
+08: (       move a1 c1 depot l2) [0]
+09: ( unload a1 c1 place2 b2 l2) [0]
+10: (     vent a1 b2 food p3 l2) [0]
+11: (          move a1 c1 l2 l1) [0]
+12: ( unload a1 c1 place3 b4 l1) [0]
+13: ( vent a1 b4 medicine p1 l1) [0]
+14: ( unload a1 c1 place4 b1 l1) [0]
+15: (     vent a1 b1 food p1 l1) [0]
+16: ( unload a1 c1 place1 b5 l1) [0]
+17: ( vent a1 b5 medicine p2 l1) [0]
+
+time spent:       0,05 seconds parsing 
+                  0,08 seconds encoding 
+                  0,00 seconds searching
+                  0,13 seconds total time
+
+memory used:      0,73 MBytes for problem representation
+                  0,00 MBytes for searching
+                  0,73 MBytes total
+
+
+269
